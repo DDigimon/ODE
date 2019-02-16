@@ -1,6 +1,7 @@
 from Gene.gene import gene
 from Gene.DNAgene import DNAgene
 from Gene.merge_gene import merge_gene
+from Gene.combination import combination as cp
 
 class GeneData():
     def __init__(self):
@@ -32,5 +33,16 @@ class GeneData():
         self.OSN=merge_gene()
         self.OG=merge_gene()
 
+    def add_link(self):
+        # TODO multiple between link combination, while add in the combination
+        self.Oct4.activate_link.append(cp([self.OS,self.Klf4,self.OSN,self.Myc]))
+        self.Oct4.inactivate_link.append(cp([self.Gata6]))
+        self.Oct4.inactivate_link.append(cp([self.Sox1]))
+
+        self.Sox2.activate_link.append(cp([self.OS,self.OSN,self.Myc,self.Klf4]))
+
+
+
 gene_data=GeneData()
+gene_data.add_link()
 print(gene_data.Oct4.init_value,gene_data.Nanog.init_value)
