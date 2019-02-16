@@ -1,11 +1,17 @@
 from Gene.gene import gene
 from Gene.DNAgene import DNAgene
 from Gene.merge_gene import merge_gene
-from Gene.combination import combination as cp
+
 
 class GeneData():
     def __init__(self):
-        self.Oct4=gene()
+        self.Oct4_gene=DNAgene()
+        self.Sox2_gene=DNAgene()
+        self.Nanog_gene=DNAgene()
+        self.Gata6_gene=DNAgene()
+        self.Sox1_gene=DNAgene()
+
+        self.Oct4=gene(DNAgene=self.Oct4_gene)
         self.Sox2=gene()
         self.Nanog=gene()
         self.Cdx2=gene()
@@ -22,25 +28,13 @@ class GeneData():
         self.EA2=gene()
         self.EA3=gene()
 
-        self.Oct4_gene=DNAgene()
-        self.Sox2_gene=DNAgene()
-        self.Nanog_gene=DNAgene()
-        self.Gata6_gene=DNAgene()
-        self.Sox1_gene=DNAgene()
 
-        self.OC=merge_gene()
-        self.OS=merge_gene()
-        self.OSN=merge_gene()
-        self.OG=merge_gene()
+        self.OC=merge_gene([self.Oct4,self.Cdx2])
+        self.OS=merge_gene([self.Oct4,self.Sox2])
+        self.OSN=merge_gene([self.Oct4,self.Sox2,self.Nanog])
+        self.OG=merge_gene([self.Oct4,self.Gata6])
 
     def add_link(self):
-        # TODO multiple between link combination, while add in the combination
-        # self.Oct4.activate_link.append(cp([self.OS,self.Klf4,self.OSN,self.Myc]))
-        # self.Oct4.inactivate_link.append(cp([self.Gata6]))
-        # self.Oct4.inactivate_link.append(cp([self.Sox1]))
-        #
-        # self.Sox2.activate_link.append(cp([self.OS,self.OSN,self.Myc,self.Klf4]))
-
         self.Oct4.activate_link=[self.OS,self.Klf4,self.OSN,self.Myc]
         self.Oct4.inactivate_link=[self.Gata6,self.Sox1,self.OC,self.Gcnf]
         self.Oct4.init_param()
@@ -104,10 +98,19 @@ class GeneData():
         self.EA3.inactivate_link=[self.EA1,self.EA2]
         self.EA3.init_param()
 
+    def one_tune(self):
+        self.Oct4.one_tune_value()
+        print(self.Oct4.link_value)
+        self.Oct4.function=self.Oct4.or_op([self.OS,self.Klf4,self.OSN,self.Myc])*\
+                           self.Oct4.and_op([self.Gata6,self.Sox2])+self.Oct4.or_op([self.OC,self.Gcnf])
+
+
+
 
 
 
 
 gene_data=GeneData()
 gene_data.add_link()
-print(gene_data.Oct4.init_value,gene_data.Nanog.init_value)
+gene_data.one_tune()
+print(gene_data.Oct4.value, gene_data.Nanog.value)
