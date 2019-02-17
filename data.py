@@ -11,28 +11,28 @@ class GeneData():
         self.Gata6_gene=DNAgene()
         self.Sox1_gene=DNAgene()
 
-        self.Oct4=gene(DNAgene=self.Oct4_gene)
-        self.Sox2=gene()
-        self.Nanog=gene()
-        self.Cdx2=gene()
-        self.Sox1=gene()
-        self.Gcnf=gene()
-        self.Pax6=gene()
-        self.Gata6=gene()
-        self.Myc=gene()
-        self.Klf4=gene()
-        self.Prc2=gene()
-        self.Mbd3=gene()
-        self.Nurd=gene()
-        self.EA1=gene()
-        self.EA2=gene()
-        self.EA3=gene()
+        self.Oct4=gene('Oct4',DNAgene=self.Oct4_gene)
+        self.Sox2=gene('Sox2')
+        self.Nanog=gene('Nanog')
+        self.Cdx2=gene('Cdx2')
+        self.Sox1=gene('Sox1')
+        self.Gcnf=gene('Gcnf')
+        self.Pax6=gene('Pax6')
+        self.Gata6=gene('Gata6')
+        self.Myc=gene('Myc')
+        self.Klf4=gene('Klf4')
+        self.Prc2=gene('Prc2')
+        self.Mbd3=gene('Mbd3')
+        self.Nurd=gene('Nurd')
+        self.EA1=gene('EA1')
+        self.EA2=gene('EA2')
+        self.EA3=gene('EA3')
 
 
-        self.OC=merge_gene([self.Oct4,self.Cdx2])
-        self.OS=merge_gene([self.Oct4,self.Sox2])
-        self.OSN=merge_gene([self.Oct4,self.Sox2,self.Nanog])
-        self.OG=merge_gene([self.Oct4,self.Gata6])
+        self.OC=merge_gene('OC',[self.Oct4,self.Cdx2])
+        self.OS=merge_gene('OS',[self.Oct4,self.Sox2])
+        self.OSN=merge_gene('OSN',[self.Oct4,self.Sox2,self.Nanog])
+        self.OG=merge_gene('OG',[self.Oct4,self.Gata6])
 
     def add_link(self):
         self.Oct4.activate_link=[self.OS,self.Klf4,self.OSN,self.Myc]
@@ -100,9 +100,16 @@ class GeneData():
 
     def one_tune(self):
         self.Oct4.one_tune_value()
-        print(self.Oct4.link_value)
-        self.Oct4.function=self.Oct4.or_op([self.OS,self.Klf4,self.OSN,self.Myc])*\
-                           self.Oct4.and_op([self.Gata6,self.Sox2])+self.Oct4.or_op([self.OC,self.Gcnf])
+        self.Oct4.function_value= self.Oct4.act_value*\
+                                  self.Oct4.or_op([self.OS, self.Klf4, self.OSN, self.Myc]) * \
+                                  self.Oct4.and_op([self.Gata6,self.Sox1]) + \
+                                  self.Oct4.inact_value*self.Oct4.or_op([self.OC,self.Gcnf])
+        self.Oct4.ODE_result()
+
+        self.Sox2.one_tune_value()
+        self.Sox2.ODE_result()
+
+
 
 
 
@@ -112,5 +119,7 @@ class GeneData():
 
 gene_data=GeneData()
 gene_data.add_link()
+print(gene_data.Oct4.value)
 gene_data.one_tune()
+print(gene_data.Oct4.value)
 print(gene_data.Oct4.value, gene_data.Nanog.value)
