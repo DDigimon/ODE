@@ -191,13 +191,14 @@ class GeneData():
                              self.Sox1_gene.inact_value*self.Sox1_gene.or_op([self.Prc2,self.Mbd3])
 
 
+    def caculate_temp(self):
+        self.temperature=0
 
 
-
-
-gene_data=GeneData()
-gene_data.add_link()
-print(gene_data.Oct4.value)
-gene_data.one_tune()
-print(gene_data.Oct4.value)
-print(gene_data.Oct4.value, gene_data.Nanog.value)
+#
+# gene_data=GeneData()
+# gene_data.add_link()
+# print(gene_data.Oct4.value)
+# gene_data.one_tune()
+# print(gene_data.Oct4.value)
+# print(gene_data.Oct4.value, gene_data.Nanog.value)
