@@ -195,10 +195,6 @@ class GeneData():
 
 
 
-
-
-
-
 gene_data=GeneData()
 gene_data.add_link()
 print(gene_data.Oct4.value)
