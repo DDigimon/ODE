@@ -194,6 +194,15 @@ class GeneData():
     def caculate_temp(self):
         self.temperature=0
 
+    def reinit_gene_value(self):
+        for gene in self.gene_list:
+            gene.init_gene_value()
+
+        self.Oct4_gene.init_gene_value()
+        self.Nanog_gene.init_gene_value()
+        self.Sox2_gene.init_gene_value()
+        self.Gata6_gene.init_gene_value()
+        self.Sox1_gene.init_gene_value()
 
 #
 # gene_data=GeneData()

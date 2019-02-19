@@ -22,6 +22,9 @@ class gene():
         self.function_value = 0
 
 
+    def init_gene_value(self):
+        self.value=np.random.random()
+
     def init_param(self):
         for i in self.activate_link:
             self.link_value[i.name]={}
