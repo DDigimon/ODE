@@ -1,6 +1,8 @@
 from Gene.gene import gene
 from Gene.merge_gene import merge_gene
 
+import numpy as np
+
 
 class GeneData():
     def __init__(self):
@@ -9,6 +11,7 @@ class GeneData():
         self.DNA_gene_list=[]
         self.gene_dic={}
         self.gene_name_dic={}
+        self.trajectories_num=0
 
         self.Oct4_gene=gene('Oct4_gene')
         self.Sox2_gene=gene('Sox2_gene')
@@ -53,57 +56,79 @@ class GeneData():
             self.gene_dic[each_gene.name]=[]
             self.gene_name_dic[each_gene.name]=each_gene
 
-    def add_link(self):
+        self._add_link()
+        self._attractor_define()
+
+    def _add_link(self):
+        # TODO trajectories_num count
         self.Oct4.activate_link=[self.OS,self.Klf4,self.OSN,self.Myc]
         self.Oct4.inactivate_link=[self.Gata6,self.Sox1,self.OC,self.Gcnf]
+        self.trajectories_num+=9
 
         self.Sox2.activate_link=[self.OS,self.OSN,self.Myc,self.Klf4]
         self.Sox2.inactivate_link=[self.Sox1,self.Gata6,self.Oct4]
+        self.trajectories_num+=8
 
         self.Nanog.activate_link=[self.OS,self.OSN,self.Myc,self.Klf4]
         self.Nanog.inactivate_link=[self.OG,self.Sox1,self.Oct4]
+        self.trajectories_num+=4
 
         self.Cdx2.activate_link=[self.Cdx2]
         self.Cdx2.inactivate_link=[self.Nanog,self.OC]
+        self.trajectories_num+=1
 
         self.Gcnf.activate_link=[self.Cdx2,self.Gata6,self.Gcnf]
+        self.trajectories_num+=1
 
         self.Pax6.activate_link=[self.Sox2,self.Pax6]
         self.Pax6.inactivate_link=[self.Oct4,self.Nanog]
+        self.trajectories_num+=2
 
         self.Sox1.activate_link=[self.Sox2]
         self.Sox1.inactivate_link=[self.Gata6,self.Oct4,self.Nanog]
+        self.trajectories_num+=4
 
         self.Gata6.activate_link=[self.Oct4]
         self.Gata6.inactivate_link=[self.Sox1,self.Sox2,self.Nanog]
-        self.Gata6.init_param()
+        self.trajectories_num+=4
 
         self.Myc.activate_link=[self.Klf4]
         self.Myc.inactivate_link=[self.Sox1,self.Gata6,self.Cdx2,self.Gcnf]
+        self.trajectories_num+=2
 
         self.Klf4.activate_link=[self.Klf4]
         self.Klf4.inactivate_link=[self.Sox1,self.Cdx2,self.Gata6,self.Gcnf]
+        self.trajectories_num+=2
 
         self.Prc2.activate_link=[self.Oct4,self.Sox2,self.Myc,self.Klf4]
         self.Prc2.inactivate_link=[self.Mbd3,self.Nurd]
+        self.trajectories_num+=2
 
         self.Mbd3.activate_link=[self.Gata6]
         self.Mbd3.inactivate_link=[self.Prc2,self.Nurd]
+        self.trajectories_num+=1
 
         self.Nurd.activate_link=[self.Sox1]
         self.Nurd.inactivate_link=[self.Prc2,self.Mbd3]
+        self.trajectories_num+=1
 
         self.EA1.activate_link=[self.Oct4,self.Sox2,self.Myc,self.Klf4]
         self.EA1.inactivate_link=[self.EA2,self.EA3]
+        self.trajectories_num+=2
 
         self.EA2.activate_link=[self.Gata6]
         self.EA2.inactivate_link=[self.EA1,self.EA3]
+        self.trajectories_num+=1
 
         self.EA3.activate_link=[self.Sox1]
         self.EA3.inactivate_link=[self.EA1,self.EA2]
+        self.trajectories_num+=1
 
         for gene in self.gene_list:
             gene.init_param()
+        #     self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
+        #     if gene in gene.activate_link:self.trajectories_num-=1
+        #     if gene in gene.inactivate_link:self.trajectories_num-=1
 
         self.Oct4_gene.activate_link=[self.EA1]
         self.Oct4_gene.inactivate_link=[self.Mbd3,self.Nurd]
@@ -122,6 +147,20 @@ class GeneData():
 
         for gene in self.DNA_gene_list:
             gene.init_param()
+            # self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
+
+    def _attractor_define(self):
+        self.attractor=[]
+        self.attractor.append(bool(self.Sox1.value>self.Oct4.value and
+                                   self.Sox1.value>self.Sox2.value and
+                                   self.Sox1.value>self.Gata6.value))
+        self.attractor.append(bool(self.Gata6.value>self.Oct4.value and
+                                   self.Gata6.value>self.Sox2.value and
+                                   self.Gata6.value>self.Sox1))
+        self.attractor.append(bool(self.Oct4.value>self.Sox1.value and
+                                   self.Oct4.value>self.Gata6.value and
+                                   self.Sox2.value>self.Gata6.value and
+                                   self.Sox2.value>self.Sox1.value))
 
     def one_tune(self):
         for gene in self.gene_list:
@@ -232,10 +271,20 @@ class GeneData():
             data.append(self.gene_dic)
         return data
 
+    def cost_value(self):
+        self.cost=0
+
+
 
 #
-# gene_data=GeneData()
-# gene_data.add_link()
+gene_data=GeneData()
+gene_data.reinit_gene_value()
+print(gene_data.Oct4.link_value)
+print(gene_data.trajectories_num)
+del gene_data
+gene_data=GeneData()
+gene_data.reinit_gene_value()
+print(gene_data.Oct4.link_value)
 # print(gene_data.trajectories_dataset(100,1,128))
 # gene_data.one_tune()
 # print(gene_data.Oct4.value)

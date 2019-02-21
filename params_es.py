@@ -2,7 +2,7 @@ from data import GeneData
 max_iterations=100
 max_temperature=100
 
-gene_data=GeneData()
-gene_data.add_link()
+result_gene_data=GeneData()
 for _ in range(max_iterations):
-    gene_data.one_tune()
+    gene_data = GeneData()
+    data=gene_data.trajectories_dataset(max_temperature,1,128)

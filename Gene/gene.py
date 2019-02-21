@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 class gene():
     def __init__(self,name,DNAgene=None):
@@ -29,12 +30,12 @@ class gene():
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method
-            self.link_value[i.name]['n']=np.random.random()
-            self.link_value[i.name]['k']=np.random.random()
+            self.link_value[i.name]['n']=random.random()
+            self.link_value[i.name]['k']=random.random()
         for i in self.inactivate_link:
             self.link_value[i.name]={}
-            self.link_value[i.name]['n']=np.random.random()
-            self.link_value[i.name]['k']=np.random.random()
+            self.link_value[i.name]['n']=random.random()
+            self.link_value[i.name]['k']=random.random()
 
     def one_tune_value(self):
         for i in self.activate_link:
