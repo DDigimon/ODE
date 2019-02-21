@@ -57,7 +57,6 @@ class GeneData():
             self.gene_name_dic[each_gene.name]=each_gene
 
         self._add_link()
-        self._attractor_define()
 
     def _add_link(self):
         # TODO trajectories_num count
@@ -150,17 +149,19 @@ class GeneData():
             # self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
 
     def _attractor_define(self):
-        self.attractor=[]
-        self.attractor.append(bool(self.Sox1.value>self.Oct4.value and
+        attractor=[]
+        attractor.append(int(bool(self.Sox1.value>self.Oct4.value and
                                    self.Sox1.value>self.Sox2.value and
-                                   self.Sox1.value>self.Gata6.value))
-        self.attractor.append(bool(self.Gata6.value>self.Oct4.value and
+                                   self.Sox1.value>self.Gata6.value)))
+        attractor.append(int(bool(self.Gata6.value>self.Oct4.value and
                                    self.Gata6.value>self.Sox2.value and
-                                   self.Gata6.value>self.Sox1))
-        self.attractor.append(bool(self.Oct4.value>self.Sox1.value and
+                                   self.Gata6.value>self.Sox1.value)))
+        attractor.append(int(bool(self.Oct4.value>self.Sox1.value and
                                    self.Oct4.value>self.Gata6.value and
                                    self.Sox2.value>self.Gata6.value and
-                                   self.Sox2.value>self.Sox1.value))
+                                   self.Sox2.value>self.Sox1.value)))
+
+        return attractor
 
     def one_tune(self):
         for gene in self.gene_list:
@@ -169,10 +170,10 @@ class GeneData():
         for gene in self.DNA_gene_list:
             gene.one_tune_value()
 
-        self.Oct4.function_value= self.Oct4.act_value*\
+        self.Oct4.function_value=round( self.Oct4.act_value*\
                                   self.Oct4.or_op([self.OS, self.Klf4, self.OSN, self.Myc]) * \
                                   self.Oct4.and_op([self.Gata6,self.Sox1]) + \
-                                  self.Oct4.inact_value*self.Oct4.or_op([self.OC,self.Gcnf])
+                                  self.Oct4.inact_value*self.Oct4.or_op([self.OC,self.Gcnf]),5)
 
         self.Sox2.function_value=self.Sox2.act_value*\
                                  (self.Sox2.or_op([self.OS,self.OSN,self.Myc,self.Klf4]))*\
@@ -255,37 +256,35 @@ class GeneData():
     def trajectories_dataset(self,max_temperature,max_iter,R):
         '''
         # TODO how to define n and R
+        cost count the same function
         :param max_temperature:
         :param R:
         :return:
         '''
         n=max_temperature*(2^8)
-        steps=int(n/R)
-        print(steps)
+        self.steps=int(n/R)
         data=[]
+        attractor_value=self._attractor_define()
         for id in range(max_iter):
-            for _ in range(steps):
+            for _ in range(self.steps):
                 for key in self.gene_dic:
+                    # dataset save
                     self.gene_dic[key].append(self.gene_name_dic[key].value)
+                # attractor value
+                tmp_attractor_value=self._attractor_define()
+                for i in range(len(attractor_value)):
+                    attractor_value[i]+=tmp_attractor_value[i]
                 self.one_tune()
             data.append(self.gene_dic)
         return data
 
-    def cost_value(self):
-        self.cost=0
 
 
 
 #
 gene_data=GeneData()
 gene_data.reinit_gene_value()
-print(gene_data.Oct4.link_value)
-print(gene_data.trajectories_num)
-del gene_data
-gene_data=GeneData()
-gene_data.reinit_gene_value()
-print(gene_data.Oct4.link_value)
-# print(gene_data.trajectories_dataset(100,1,128))
+print(gene_data.trajectories_dataset(100,1,128))
 # gene_data.one_tune()
 # print(gene_data.Oct4.value)
 # print(gene_data.Oct4.value, gene_data.Nanog.value)
