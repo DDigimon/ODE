@@ -4,7 +4,11 @@ from Gene.merge_gene import merge_gene
 
 class GeneData():
     def __init__(self):
+        # TODO use special method to load data, some mode?
         self.gene_list=[]
+        self.DNA_gene_list=[]
+        self.gene_dic={}
+        self.gene_name_dic={}
 
         self.Oct4_gene=gene('Oct4_gene')
         self.Sox2_gene=gene('Sox2_gene')
@@ -32,11 +36,22 @@ class GeneData():
         self.gene_list=[self.Oct4,self.Sox2,self.Nanog,self.Cdx2,self.Sox1,self.Gcnf,self.Pax6,self.Gata6,
                         self.Myc,self.Klf4,self.Prc2,self.Mbd3,self.Nurd,self.EA1,self.EA2,self.EA3]
 
+        self.DNA_gene_list=[self.Oct4_gene,self.Nanog_gene,self.Gata6_gene,self.Sox1_gene,self.Sox2_gene]
+
 
         self.OC=merge_gene('OC',[self.Oct4,self.Cdx2])
         self.OS=merge_gene('OS',[self.Oct4,self.Sox2])
         self.OSN=merge_gene('OSN',[self.Oct4,self.Sox2,self.Nanog])
         self.OG=merge_gene('OG',[self.Oct4,self.Gata6])
+
+        # TODO whether need a function
+
+        for each_gene in self.gene_list:
+            self.gene_dic[each_gene.name]=[]
+            self.gene_name_dic[each_gene.name]=each_gene
+        for each_gene in self.DNA_gene_list:
+            self.gene_dic[each_gene.name]=[]
+            self.gene_name_dic[each_gene.name]=each_gene
 
     def add_link(self):
         self.Oct4.activate_link=[self.OS,self.Klf4,self.OSN,self.Myc]
@@ -92,26 +107,27 @@ class GeneData():
 
         self.Oct4_gene.activate_link=[self.EA1]
         self.Oct4_gene.inactivate_link=[self.Mbd3,self.Nurd]
-        self.Oct4_gene.init_param()
 
         self.Sox2_gene.activate_link=[self.EA1]
         self.Sox2_gene.inactivate_link=[self.Mbd3,self.Nurd]
-        self.Sox2_gene.init_param()
 
         self.Nanog_gene.activate_link=[self.EA1]
         self.Nanog_gene.inactivate_link=[self.Mbd3,self.Nurd]
-        self.Nanog_gene.init_param()
 
         self.Gata6_gene.activate_link=[self.EA2]
         self.Gata6_gene.inactivate_link=[self.Prc2,self.Nurd]
-        self.Gata6_gene.init_param()
 
         self.Sox1_gene.activate_link=[self.EA3]
         self.Sox1_gene.inactivate_link=[self.Prc2,self.Mbd3]
-        self.Sox1_gene.init_param()
+
+        for gene in self.DNA_gene_list:
+            gene.init_param()
 
     def one_tune(self):
         for gene in self.gene_list:
+            gene.one_tune_value()
+
+        for gene in self.DNA_gene_list:
             gene.one_tune_value()
 
         self.Oct4.function_value= self.Oct4.act_value*\
@@ -170,29 +186,22 @@ class GeneData():
         for gene in self.gene_list:
             gene.ODE_result()
 
-        self.Oct4_gene.one_tune_value()
         self.Oct4_gene.value=self.Oct4_gene.act_value*self.Oct4_gene.or_op([self.EA1])+\
                              self.Oct4_gene.inact_value*self.Oct4_gene.or_op([self.Mbd3,self.Nurd])
 
-        self.Sox2_gene.one_tune_value()
         self.Sox2_gene.value=self.Sox2_gene.act_value*self.Sox2_gene.or_op([self.EA1])+\
                              self.Sox2_gene.inact_value*self.Sox2_gene.or_op([self.Mbd3,self.Nurd])
 
-        self.Nanog_gene.one_tune_value()
         self.Nanog_gene.value=self.Nanog_gene.act_value*self.Nanog_gene.or_op([self.EA1])+\
                               self.Nanog_gene.inact_value*self.Nanog_gene.or_op([self.Mbd3,self.Nurd])
 
-        self.Gata6_gene.one_tune_value()
         self.Gata6_gene.value=self.Gata6_gene.act_value*self.Gata6_gene.or_op([self.EA2])+\
                               self.Gata6_gene.inact_value*self.Gata6_gene.or_op([self.Prc2,self.Nurd])
 
-        self.Sox1_gene.one_tune_value()
         self.Sox1_gene.value=self.Sox1_gene.act_value*self.Sox1_gene.or_op([self.EA3])+\
                              self.Sox1_gene.inact_value*self.Sox1_gene.or_op([self.Prc2,self.Mbd3])
 
 
-    def caculate_temp(self):
-        self.temperature=0
 
     def reinit_gene_value(self):
         for gene in self.gene_list:
@@ -204,10 +213,31 @@ class GeneData():
         self.Gata6_gene.init_gene_value()
         self.Sox1_gene.init_gene_value()
 
+    def trajectories_dataset(self,max_temperature,max_iter,R):
+        '''
+        # TODO how to define n and R
+        :param max_temperature:
+        :param R:
+        :return:
+        '''
+        n=max_temperature*(2^8)
+        steps=int(n/R)
+        print(steps)
+        data=[]
+        for id in range(max_iter):
+            for _ in range(steps):
+                for key in self.gene_dic:
+                    self.gene_dic[key].append(self.gene_name_dic[key].value)
+                self.one_tune()
+            data.append(self.gene_dic)
+        return data
+
+
 #
 # gene_data=GeneData()
 # gene_data.add_link()
-# print(gene_data.Oct4.value)
+# print(gene_data.trajectories_dataset(100,1,128))
 # gene_data.one_tune()
 # print(gene_data.Oct4.value)
 # print(gene_data.Oct4.value, gene_data.Nanog.value)
+

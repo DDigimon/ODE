@@ -5,7 +5,7 @@ class gene():
         # TODO init method
         self.name=name
         self.value=np.random.random()
-        self.kbase=self.value
+        self.kbase=np.random.random()
         self.act_value = np.random.random()
         self.inact_value = np.random.random()
         self.gama=np.random.random()
@@ -67,6 +67,6 @@ class gene():
 
 
     def ODE_result(self):
-        self.value=self.DNA_value*(self.kbase+self.function_value)-self.gama*self.value
+        self.value=self.DNA_value*(self.kbase+self.function_value)-self.gama
 
 
