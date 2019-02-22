@@ -223,7 +223,9 @@ class GeneData():
         self.EA3.function_value=self.EA3.act_value*self.EA3.or_op([self.Sox1])+\
                                 self.EA3.inact_value*self.EA3.or_op([self.EA1,self.EA2])
 
+
         for gene in self.gene_list:
+            gene.function_value=round(gene.function_value,gene.max_acc)
             gene.ODE_result()
 
         self.Oct4_gene.value=self.Oct4_gene.act_value*self.Oct4_gene.or_op([self.EA1])+\
@@ -241,6 +243,9 @@ class GeneData():
         self.Sox1_gene.value=self.Sox1_gene.act_value*self.Sox1_gene.or_op([self.EA3])+\
                              self.Sox1_gene.inact_value*self.Sox1_gene.or_op([self.Prc2,self.Mbd3])
 
+        for gene in self.DNA_gene_list:
+            gene.value=round(gene.value,gene.max_acc)
+
 
 
     def reinit_gene_value(self):
@@ -253,7 +258,7 @@ class GeneData():
         self.Gata6_gene.init_gene_value()
         self.Sox1_gene.init_gene_value()
 
-    def trajectories_dataset(self,max_temperature,max_iter,R):
+    def trajectories_op(self, max_temperature, max_iter, R):
         '''
         # TODO how to define n and R
         cost count the same function
@@ -276,6 +281,8 @@ class GeneData():
                     attractor_value[i]+=tmp_attractor_value[i]
                 self.one_tune()
             data.append(self.gene_dic)
+
+
         return data
 
 
@@ -284,7 +291,7 @@ class GeneData():
 #
 gene_data=GeneData()
 gene_data.reinit_gene_value()
-print(gene_data.trajectories_dataset(100,1,128))
+print(gene_data.trajectories_op(100, 1, 128))
 # gene_data.one_tune()
 # print(gene_data.Oct4.value)
 # print(gene_data.Oct4.value, gene_data.Nanog.value)

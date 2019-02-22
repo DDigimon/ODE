@@ -5,4 +5,4 @@ max_temperature=100
 result_gene_data=GeneData()
 for _ in range(max_iterations):
     gene_data = GeneData()
-    data=gene_data.trajectories_dataset(max_temperature,1,128)
+    data=gene_data.trajectories_op(max_temperature, 1, 128)
