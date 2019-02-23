@@ -17,6 +17,7 @@ class gene():
         self.activate_link=[]
         self.inactivate_link=[]
         self.link_value={}
+        self.iter_link_value={}
         self.DNAgene=DNAgene
         if self.DNAgene!=None:
             self.DNA_value=self.DNAgene.value
@@ -49,9 +50,9 @@ class gene():
 
     def one_tune_value(self):
         for i in self.activate_link:
-            self.link_value[i.name]['v']=self.act(i)
+            self.iter_link_value[i.name]=self.act(i)
         for i in self.inactivate_link:
-            self.link_value[i.name]['v']=self.in_act(i)
+            self.iter_link_value[i.name]=self.in_act(i)
 
     def act(self,gene):
         return round(self._n_times(gene.value , self.link_value[gene.name]['n']) / \
@@ -66,13 +67,13 @@ class gene():
     def or_op(self, gene_list):
         result = 0
         for gene in gene_list:
-            result += self.link_value[gene.name]['v']
+            result += self.iter_link_value[gene.name]
         return result
 
     def and_op(self, gene_list):
         result = 1
         for gene in gene_list:
-            result *= self.link_value[gene.name]['v']
+            result *= self.iter_link_value[gene.name]
             result=round(result,5)
         return result
 

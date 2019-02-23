@@ -10,6 +10,8 @@ class GeneData():
         # TODO use special method to load data, some mode?
         self.gene_list=[]
         self.DNA_gene_list=[]
+        self.gene_name_dic={}
+        self.gene_id_dic={}
         self.trajectories_num=0
         self.gene_num=0
         self.max_acc=4
@@ -48,7 +50,12 @@ class GeneData():
         self.OSN=merge_gene('OSN',[self.Oct4,self.Sox2,self.Nanog])
         self.OG=merge_gene('OG',[self.Oct4,self.Gata6])
 
-
+        for each_gene in self.gene_list:
+            self.gene_id_dic[each_gene] = each_gene.name
+            self.gene_name_dic[each_gene.name] = each_gene
+        for each_gene in self.DNA_gene_list:
+            self.gene_id_dic[each_gene] = each_gene.name
+            self.gene_name_dic[each_gene.name] = each_gene
 
         self._add_link()
 
@@ -306,6 +313,14 @@ class GeneData():
 
         return data
 
+class DataSaver():
+    def __init__(self,gene_data):
+        self.gene_data=gene_data
+
+    def release_data(self,gene_data):
+        for gene in gene_data.gene_name_dic:
+            gene_data.gene_name_dic[gene].link_value=self.gene_data.gene_name_dic[gene].link_value
+        return gene_data
 
 
 
@@ -314,9 +329,14 @@ class GeneData():
 
 #
 # gene_data=GeneData()
+# data_saver=DataSaver(gene_data)
+#
 # gene_data.reinit_gene_value()
-# # print(gene_data.trajectories_op(100, 1, 128))
-# gene_data.attractor_count(10)
+# print(gene_data.trajectories_op(100, 1, 128))
+# del gene_data
+# gene_data=GeneData()
+# data_saver.release_data(gene_data)
+# # gene_data.attractor_count(10)
 # for gene in gene_data.gene_list:
 #     print(gene.name,gene.value)
 # gene_data.one_tune()
