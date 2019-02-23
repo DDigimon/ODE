@@ -307,10 +307,6 @@ class GeneData():
                 self.one_tune()
 
             data.append(gene_dic)
-            # self.cost=attractor_num
-            # for attractor in attractor_value:
-            #     self.cost+=abs(attractor_num/float(attractor)-attractor)
-
         return data
 
 class DataSaver():
