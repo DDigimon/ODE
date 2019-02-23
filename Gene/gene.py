@@ -6,7 +6,7 @@ class gene():
         # TODO init method
         # TODO acc control
         self.type='float64'
-        self.max_acc=32
+        self.max_acc=4
         self.name=name
         self.value=round(np.random.random(),self.max_acc)
         self.kbase=round(np.random.random(),self.max_acc)

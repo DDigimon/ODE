@@ -148,6 +148,14 @@ class GeneData():
             gene.init_param()
             # self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
 
+    def _sum_value_for_data(self,data,n):
+        sum_value=0
+        for gene in self.gene_list:
+            sum_value+=data[gene.name][n]
+        for gene in self.DNA_gene_list:
+            sum_value+=data[gene.name][n]
+        return sum_value
+
     def _attractor_define(self):
         attractor=[]
         attractor.append(int(bool(self.Sox1.value>self.Oct4.value and
@@ -257,6 +265,7 @@ class GeneData():
         self.Sox2_gene.init_gene_value()
         self.Gata6_gene.init_gene_value()
         self.Sox1_gene.init_gene_value()
+        # print(len(self.gene_list))
 
     def trajectories_op(self, max_temperature, max_iter, R):
         '''
@@ -274,7 +283,7 @@ class GeneData():
         attractor_value=self._attractor_define()
         # attractor_num=len(attractor_value)
         for id in range(max_iter):
-            for _ in range(self.steps):
+            for times in range(self.steps):
                 for key in self.gene_dic:
                     # dataset save
                     self.gene_dic[key].append(self.gene_name_dic[key].value)
@@ -293,6 +302,8 @@ class GeneData():
 
         return data
 
+    # def attractor_count(self,iter):
+
 
 
 
@@ -300,6 +311,8 @@ class GeneData():
 gene_data=GeneData()
 gene_data.reinit_gene_value()
 print(gene_data.trajectories_op(100, 1, 128))
+# for gene in gene_data.gene_list:
+#     print(gene.name,gene.value)
 # gene_data.one_tune()
 # print(gene_data.Oct4.value)
 # print(gene_data.Oct4.value, gene_data.Nanog.value)
