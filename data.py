@@ -261,7 +261,9 @@ class GeneData():
     def trajectories_op(self, max_temperature, max_iter, R):
         '''
         # TODO how to define n and R
-        cost count the same function
+        # TODO how to define max iter (max trajectory ?)
+        cost count in the same function
+        cost function need to be improved
         :param max_temperature:
         :param R:
         :return:
@@ -270,6 +272,7 @@ class GeneData():
         self.steps=int(n/R)
         data=[]
         attractor_value=self._attractor_define()
+        # attractor_num=len(attractor_value)
         for id in range(max_iter):
             for _ in range(self.steps):
                 for key in self.gene_dic:
@@ -277,11 +280,16 @@ class GeneData():
                     self.gene_dic[key].append(self.gene_name_dic[key].value)
                 # attractor value
                 tmp_attractor_value=self._attractor_define()
+
                 for i in range(len(attractor_value)):
                     attractor_value[i]+=tmp_attractor_value[i]
                 self.one_tune()
-            data.append(self.gene_dic)
 
+            data.append(self.gene_dic)
+            print(attractor_value)
+            # self.cost=attractor_num
+            # for attractor in attractor_value:
+            #     self.cost+=abs(attractor_num/float(attractor)-attractor)
 
         return data
 
