@@ -1,5 +1,6 @@
 from Gene.gene import gene
 from Gene.merge_gene import merge_gene
+from tqdm import tqdm
 
 import numpy as np
 
@@ -9,9 +10,9 @@ class GeneData():
         # TODO use special method to load data, some mode?
         self.gene_list=[]
         self.DNA_gene_list=[]
-        self.gene_dic={}
-        self.gene_name_dic={}
         self.trajectories_num=0
+        self.gene_num=0
+        self.max_acc=4
 
         self.Oct4_gene=gene('Oct4_gene')
         self.Sox2_gene=gene('Sox2_gene')
@@ -40,21 +41,14 @@ class GeneData():
                         self.Myc,self.Klf4,self.Prc2,self.Mbd3,self.Nurd,self.EA1,self.EA2,self.EA3]
 
         self.DNA_gene_list=[self.Oct4_gene,self.Nanog_gene,self.Gata6_gene,self.Sox1_gene,self.Sox2_gene]
-
+        self.gene_num=len(self.gene_list)+len(self.DNA_gene_list)
 
         self.OC=merge_gene('OC',[self.Oct4,self.Cdx2])
         self.OS=merge_gene('OS',[self.Oct4,self.Sox2])
         self.OSN=merge_gene('OSN',[self.Oct4,self.Sox2,self.Nanog])
         self.OG=merge_gene('OG',[self.Oct4,self.Gata6])
 
-        # TODO whether need a function
 
-        for each_gene in self.gene_list:
-            self.gene_dic[each_gene.name]=[]
-            self.gene_name_dic[each_gene.name]=each_gene
-        for each_gene in self.DNA_gene_list:
-            self.gene_dic[each_gene.name]=[]
-            self.gene_name_dic[each_gene.name]=each_gene
 
         self._add_link()
 
@@ -149,7 +143,14 @@ class GeneData():
             # self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
 
     def _sum_value_for_data(self,data,n):
+        '''
+
+        :param data:
+        :param n: the n(th)
+        :return:
+        '''
         sum_value=0
+        n-=1
         for gene in self.gene_list:
             sum_value+=data[gene.name][n]
         for gene in self.DNA_gene_list:
@@ -280,37 +281,42 @@ class GeneData():
         n=max_temperature*(2^8)
         self.steps=int(n/R)
         data=[]
-        attractor_value=self._attractor_define()
-        # attractor_num=len(attractor_value)
+        gene_dic = {}
+        gene_name_dic = {}
+        # TODO whether need a function
+        # init
+        for each_gene in self.gene_list:
+            gene_dic[each_gene.name] = []
+            gene_name_dic[each_gene.name] = each_gene
+        for each_gene in self.DNA_gene_list:
+            gene_dic[each_gene.name] = []
+            gene_name_dic[each_gene.name] = each_gene
+
         for id in range(max_iter):
             for times in range(self.steps):
-                for key in self.gene_dic:
+                for key in gene_dic:
                     # dataset save
-                    self.gene_dic[key].append(self.gene_name_dic[key].value)
-                # attractor value
-                tmp_attractor_value=self._attractor_define()
-
-                for i in range(len(attractor_value)):
-                    attractor_value[i]+=tmp_attractor_value[i]
+                    gene_dic[key].append(gene_name_dic[key].value)
                 self.one_tune()
 
-            data.append(self.gene_dic)
-            print(attractor_value)
+            data.append(gene_dic)
             # self.cost=attractor_num
             # for attractor in attractor_value:
             #     self.cost+=abs(attractor_num/float(attractor)-attractor)
 
         return data
 
-    # def attractor_count(self,iter):
+
+
 
 
 
 
 #
-gene_data=GeneData()
-gene_data.reinit_gene_value()
-print(gene_data.trajectories_op(100, 1, 128))
+# gene_data=GeneData()
+# gene_data.reinit_gene_value()
+# # print(gene_data.trajectories_op(100, 1, 128))
+# gene_data.attractor_count(10)
 # for gene in gene_data.gene_list:
 #     print(gene.name,gene.value)
 # gene_data.one_tune()

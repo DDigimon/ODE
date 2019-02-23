@@ -6,7 +6,7 @@ class gene():
         # TODO init method
         # TODO acc control
         self.type='float64'
-        self.max_acc=4
+        self.max_acc=3
         self.name=name
         self.value=round(np.random.random(),self.max_acc)
         self.kbase=round(np.random.random(),self.max_acc)
@@ -40,11 +40,11 @@ class gene():
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method
-            self.link_value[i.name]['n']=random.randint(1,3)
+            self.link_value[i.name]['n']=random.randint(1,2)
             self.link_value[i.name]['k']=round(np.random.random(),self.max_acc)
         for i in self.inactivate_link:
             self.link_value[i.name]={}
-            self.link_value[i.name]['n']=random.randint(1,3)
+            self.link_value[i.name]['n']=random.randint(1,2)
             self.link_value[i.name]['k']=round(np.random.random(),self.max_acc)
 
     def one_tune_value(self):
