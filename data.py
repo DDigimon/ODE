@@ -1,6 +1,6 @@
 from Gene.gene import gene
 from Gene.merge_gene import merge_gene
-from tqdm import tqdm
+import pickle
 
 import numpy as np
 
@@ -164,7 +164,7 @@ class GeneData():
             sum_value+=data[gene.name][n]
         return sum_value
 
-    def _attractor_define(self):
+    def attractor_define(self):
         attractor=[]
         attractor.append(int(bool(self.Sox1.value>self.Oct4.value and
                                    self.Sox1.value>self.Sox2.value and
@@ -275,10 +275,9 @@ class GeneData():
         self.Sox1_gene.init_gene_value()
         # print(len(self.gene_list))
 
-    def trajectories_op(self, max_temperature, max_iter, R):
+    def trajectories_op(self, max_temperature, R):
         '''
         # TODO how to define n and R
-        # TODO how to define max iter (max trajectory ?)
         cost count in the same function
         cost function need to be improved
         :param max_temperature:
@@ -299,15 +298,15 @@ class GeneData():
             gene_dic[each_gene.name] = []
             gene_name_dic[each_gene.name] = each_gene
 
-        for id in range(max_iter):
-            for times in range(self.steps):
-                for key in gene_dic:
-                    # dataset save
-                    gene_dic[key].append(gene_name_dic[key].value)
-                self.one_tune()
 
-            data.append(gene_dic)
-        return data
+        for times in range(self.steps):
+            for key in gene_dic:
+                # dataset save
+                gene_dic[key].append(gene_name_dic[key].value)
+            self.one_tune()
+
+        data.append(gene_dic)
+        return data[0]
 
 class DataSaver():
     def __init__(self,gene_data):
@@ -316,7 +315,17 @@ class DataSaver():
     def release_data(self,gene_data):
         for gene in gene_data.gene_name_dic:
             gene_data.gene_name_dic[gene].link_value=self.gene_data.gene_name_dic[gene].link_value
+            gene_data.gene_name_dic[gene].act_value=self.gene_data.gene_name_dic[gene].act_value
+            gene_data.gene_name_dic[gene].inact_value=self.gene_data.gene_name_dic[gene].inact_value
         return gene_data
+
+    def load_data(self):
+        with open('./data/result.pkl','rb') as f:
+            pickle.load(f)
+
+    def save_data(self):
+        with open('./data/result.pkl','wb') as f:
+            pickle.dump(self.gene_data,f)
 
 
 

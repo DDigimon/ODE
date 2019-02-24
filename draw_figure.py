@@ -10,13 +10,26 @@
 # ax.set_xlabel('z')
 # plt.show()
 
-# import GPy
-# # GPy.tests()
 
-from GPy.models.gplvm import GPLVM  # observed data: simulate data
-# from GPy.models.ss_mrd import IBPPrior_SSMRD
-import numpy as np
-Y=np.array([[1,2,3],
-            [2,3,4]])
-output=GPLVM(Y,1,init='PCA')
-print(output)
+# from GPy.models.gplvm import GPLVM  # observed data: simulate data
+# # from GPy.models.ss_mrd import IBPPrior_SSMRD
+# import numpy as np
+# Y=np.array([[1,2,3],
+#             [2,3,4]])
+# output=GPLVM(Y,1,init='PCA')
+# print(output)
+
+from data import DataSaver,GeneData
+import pandas as pd
+
+data_list=[]
+max_group=100
+
+gene_data=GeneData()
+data_saver=DataSaver(gene_data)
+data_saver.load_data()
+gene_data=data_saver.release_data(gene_data)
+
+for _ in range(max_group):
+    data=gene_data.trajectories_op(100,128)
+    print(data)
