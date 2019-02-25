@@ -321,7 +321,7 @@ class DataSaver():
 
     def load_data(self):
         with open('./data/result.pkl','rb') as f:
-            pickle.load(f)
+            self.gene_data=pickle.load(f)
 
     def save_data(self):
         with open('./data/result.pkl','wb') as f:
