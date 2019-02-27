@@ -12,3 +12,4 @@ The last part need to increase or remove).
 trajectories operation
 7. Why choose some genes to GPLVM model, instead of all genes?(too large?)
 8. the final result would still have unstable state when test on different gene init value.
+9. Attr_param defines method?
