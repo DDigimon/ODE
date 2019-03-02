@@ -19,6 +19,8 @@ class Energy():
 
     def _function_define(self,v,m,gama):
         return 1/(1+math.exp((m-v)/float(gama)))
+    def _function_define_v(self,v,m,gama):
+        return m-gama*np.log((1-v)/float(v))
 
     def energy_count(self):
         for gene in self.chosed_gene:
