@@ -63,7 +63,7 @@ class ES():
             temperature=round(temperature,3)
             print('Epoch:',i)
 
-
+        # save a,n,k value
         # self.data_saver.gene_data=current_data
         # self.data_saver.save_data()
 

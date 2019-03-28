@@ -7,12 +7,14 @@ class gene():
         # TODO acc control
         self.type='float64'
         self.max_acc=3
+        self.nor_mu=0
+        self.nor_sigm=0.5
         self.name=name
-        self.value=round(np.random.random(),self.max_acc)
-        self.kbase=round(np.random.random(),self.max_acc)
-        self.act_value = round(np.random.random(),self.max_acc)
-        self.inact_value = round(np.random.random(),self.max_acc)
-        self.gama=round(np.random.random(),self.max_acc)
+        self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.kbase=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.act_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.inact_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.gama=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
         self.activate_link=[]
         self.inactivate_link=[]
@@ -35,18 +37,18 @@ class gene():
         return a
 
     def init_gene_value(self):
-        self.value=round(np.random.random(),self.max_acc)
+        self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
     def init_param(self):
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method
             self.link_value[i.name]['n']=random.randint(1,2)
-            self.link_value[i.name]['k']=round(np.random.random(),self.max_acc)
+            self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
         for i in self.inactivate_link:
             self.link_value[i.name]={}
             self.link_value[i.name]['n']=random.randint(1,2)
-            self.link_value[i.name]['k']=round(np.random.random(),self.max_acc)
+            self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
     def one_tune_value(self):
         for i in self.activate_link:
