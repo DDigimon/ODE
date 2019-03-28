@@ -43,11 +43,11 @@ class gene():
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method
-            self.link_value[i.name]['n']=random.randint(1,2)
+            self.link_value[i.name]['n']=random.randint(1,4)
             self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
         for i in self.inactivate_link:
             self.link_value[i.name]={}
-            self.link_value[i.name]['n']=random.randint(1,2)
+            self.link_value[i.name]['n']=random.randint(1,4)
             self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
     def one_tune_value(self):

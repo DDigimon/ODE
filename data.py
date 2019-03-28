@@ -308,6 +308,7 @@ class GeneData():
         data.append(gene_dic)
         return data[0]
 
+
 class DataSaver():
     def __init__(self,gene_data):
         self.gene_data=gene_data
@@ -319,12 +320,12 @@ class DataSaver():
             gene_data.gene_name_dic[gene].inact_value=self.gene_data.gene_name_dic[gene].inact_value
         return gene_data
 
-    def load_data(self):
-        with open('./data/result.pkl','rb') as f:
+    def load_data(self,load_path):
+        with open(load_path,'rb') as f:
             self.gene_data=pickle.load(f)
 
-    def save_data(self):
-        with open('./data/result.pkl','wb') as f:
+    def save_data(self,save_path):
+        with open(save_path,'wb') as f:
             pickle.dump(self.gene_data,f)
 
 
