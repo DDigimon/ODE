@@ -87,5 +87,5 @@ class ES():
 
 
 
-# es=ES(50,temperature_rate=max_temperature,save_path='./data/result.pkl')
-# es.SA(max_iterations,max_temperature)
+es=ES(50,temperature_rate=max_temperature,save_path='./data/result.pkl')
+es.SA(max_iterations,max_temperature)

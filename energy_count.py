@@ -6,9 +6,10 @@ from GPy.models.gplvm import GPLVM
 from matplotlib import cm
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+from final_data_generator import Generator
 
-with open('./data/final_data.pkl','rb') as f:
-    gene_data=pickle.load(f)
+# with open('./data/final_data.pkl','rb') as f:
+#     gene_data=pickle.load(f)
 
 
 class EnergyLandscape():
@@ -19,17 +20,26 @@ class EnergyLandscape():
     4. each point of (x,y) have two solution of u according to 3
     5. u=ux*uy according to Gaussian distribution
     '''
-    def __init__(self,gene_data,select_gene,mode=None,latent_dim=2):
-        self.gene_data=gene_data
+    def __init__(self,select_gene,gene_data_path,generator_path,mode=None,generator_final_data=False,
+                 max_group=100,latent_dim=2,gene_sum_max=4,gene_sum_min=-4):
         self.select_gene=select_gene
         self.latent_dim=latent_dim
         self.mode=mode
         if len(select_gene)>2:
             self.mode='GPDM'
 
+        generator_data=Generator(max_group=max_group,choose_gene=select_gene,gene_data_path=gene_data_path,
+                                 result_path=generator_path,gene_sum_max=gene_sum_max,gene_sum_min=gene_sum_min)
+        if generator_final_data==False:
+            generator_data.load_gene_data()
+        else:
+            generator_data.generator()
+        self.gene_data=generator_data.gene_dic
 
         if self.mode=='GPDM':
             self.gpdm_output=self.GPDM_solver()
+
+
 
     def init_landscape(self,size,x_range=None,y_range=None):
         self.landscape = np.ones((size))
@@ -126,8 +136,16 @@ class EnergyLandscape():
         return output
 
 
-energy_land=EnergyLandscape(gene_data,['Oct4','Sox2','Nanog','Cdx2','Pax6','Sox1','Gata6','Myc','Klf4'],mode='GPDM')
-energy_land.init_landscape((20,20),(-0.5,1.5),(-0.5,1.5))
+gene_data_path='./data/result.pkl'
+generator_path='./data/generator_result.pkl'
+
+energy_land=EnergyLandscape(select_gene=['Oct4','Sox2','Nanog','Cdx2','Pax6','Sox1','Gata6','Myc','Klf4'],
+                            gene_data_path=gene_data_path,generator_path=generator_path,
+                            mode='GPDM',generator_final_data=True)
+# energy_land=EnergyLandscape(select_gene=['Sox1','Gata6'],
+#                             gene_data_path=gene_data_path,generator_path=generator_path,
+#                             generator_final_data=False)
+energy_land.init_landscape((30,30),(-0.5,1.5),(-0.5,1.5))
 energy_land.quasi_landscape()
 energy_land.draw_landscape()
-
+# print(gene_data.Oct4)

@@ -1,5 +1,6 @@
 from Gene.gene import gene
 from Gene.merge_gene import merge_gene
+from Gene.param_manager import ParamManager
 import pickle
 
 import numpy as np
@@ -57,6 +58,7 @@ class GeneData():
             self.gene_id_dic[each_gene] = each_gene.name
             self.gene_name_dic[each_gene.name] = each_gene
 
+        self.params=ParamManager()
         self._add_link()
 
     def _add_link(self):
@@ -125,10 +127,8 @@ class GeneData():
         self.trajectories_num+=1
 
         for gene in self.gene_list:
-            gene.init_param()
-        #     self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
-        #     if gene in gene.activate_link:self.trajectories_num-=1
-        #     if gene in gene.inactivate_link:self.trajectories_num-=1
+            gene.init_param(act_k=self.params.act_k,act_n=self.params.act_n,
+                            inact_k=self.params.inact_k,inact_n=self.params.inact_n)
 
         self.Oct4_gene.activate_link=[self.EA1]
         self.Oct4_gene.inactivate_link=[self.Mbd3,self.Nurd]
@@ -146,7 +146,8 @@ class GeneData():
         self.Sox1_gene.inactivate_link=[self.Prc2,self.Mbd3]
 
         for gene in self.DNA_gene_list:
-            gene.init_param()
+            gene.init_param(act_k=self.params.act_k, act_n=self.params.act_n,
+                            inact_k=self.params.inact_k, inact_n=self.params.inact_n)
             # self.trajectories_num+=len(gene.activate_link)+len(gene.inactivate_link)
 
     def _sum_value_for_data(self,data,n):

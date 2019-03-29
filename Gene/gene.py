@@ -39,16 +39,17 @@ class gene():
     def init_gene_value(self):
         self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
-    def init_param(self):
+    def init_param(self,act_n=random.randint(1,4),inact_n=random.randint(1,4),
+                   act_k=round(np.random.normal(0,0.5),3),inact_k=round(np.random.normal(0,0.5),3)):
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method
-            self.link_value[i.name]['n']=random.randint(1,4)
-            self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+            self.link_value[i.name]['n']=act_n
+            self.link_value[i.name]['k']=act_k
         for i in self.inactivate_link:
             self.link_value[i.name]={}
-            self.link_value[i.name]['n']=random.randint(1,4)
-            self.link_value[i.name]['k']=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+            self.link_value[i.name]['n']=inact_n
+            self.link_value[i.name]['k']=inact_k
 
     def one_tune_value(self):
         for i in self.activate_link:
