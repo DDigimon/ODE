@@ -11,10 +11,10 @@ class gene():
         self.nor_sigm=0.5
         self.name=name
         self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
-        self.kbase=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.kbase=0
         self.act_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
         self.inact_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
-        self.gama=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.gama=0.1
 
         self.activate_link=[]
         self.inactivate_link=[]

@@ -62,18 +62,19 @@ class ES():
                 self.cost+=abs(self.max_trajectories/len(self.attractor_value)-i)-i
         print(self.attractor_value)
 
-    def SA(self,iterations,temperature):
+    def SA(self,iterations,temperature,save_dir=None):
         # init
         current_cost=self.max_trajectories
-
         for i in range(1,iterations):
             self.attractor_count()
             self.cost_count()
             new_cost=self.cost
+            save_path=save_dir
             if new_cost<=current_cost or\
                 math.exp((current_cost-new_cost)/float(temperature))>np.random.random():
                 current_cost=new_cost
-                self.data_saver.save_data(self.save_path)
+                save_path+=str(i)+'.pkl'
+                self.data_saver.save_data(save_path)
                 print(current_cost,'Update !')
             temperature*=self.temperature_rate
             temperature=round(temperature,3)
@@ -87,5 +88,5 @@ class ES():
 
 
 
-es=ES(50,temperature_rate=max_temperature,save_path='./data/result.pkl')
-es.SA(max_iterations,max_temperature)
+es=ES(50,temperature_rate=max_temperature,save_path='./data/result/')
+es.SA(max_iterations,max_temperature,save_dir='./data/result4/')

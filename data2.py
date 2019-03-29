@@ -178,88 +178,110 @@ class GeneData():
 
         return attractor
 
+
     def one_tune(self):
+        # for gene in self.gene_list:
+        #     gene.one_tune_value()
+        #
+        # for gene in self.DNA_gene_list:
+        #     gene.one_tune_value()
+        #
+        def count_func(n, k, gene_list, mode='a'):
+            value = 1
+            for gene in gene_list:
+                value *= gene.value
+            if mode == 'a':
+                return round(value ** n / (k ** n + value ** n), 3)
+            if mode == 'i':
+                return round(k ** n / (k ** n + value ** n), 3)
+        a1,a2,a3,a4,a5,a6,a7,a8,a9,a10=0.4802,0.7065,0.6033,0.2405,0.8269,0.0386,0.7158,0.3503,0.6858,0.7
+        n1,n2 ,n3,n4=1,5,7,2
+        k1,k2,k3,k4=0.1,0.4,0.0252,0.4086
+        a=0.1
+        b=0.01
+        self.Oct4.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+count_func(n1,k1,[self.Klf4])+
+                                    count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc]))*\
+                                 count_func(n2,k2,[self.Gata6],mode='i')*count_func(n2,k2,[self.Sox1],mode='i')+\
+                                 (count_func(n2,k2,[self.Oct4,self.Cdx2],mode='i')+count_func(n2,k2,[self.Gcnf])*b)
+
+        self.Sox2.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
+                                    count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+
+                                    count_func(n1,k1,[self.Myc])+count_func(n1,k1,[self.Klf4]))*\
+                                 count_func(n2,k2,[self.Sox1],mode='i')*count_func(n2,k2,[self.Gata6],mode='i')+\
+                                 count_func(n3,k2,[self.Oct4],mode='i')*b
+
+        self.Nanog.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
+                                     count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc])+
+                                     count_func(n1,k1,[self.Klf4]))*count_func(n2,k2,[self.Oct4,self.Gata6],mode='i')*\
+                                  count_func(n2,k2,[self.Sox1],mode='i')+count_func(n2,k2,[self.Oct4],mode='i')*b
+
+        self.Cdx2.function_value=a10*count_func(n1,k1,[self.Cdx2])*count_func(n3,k2,[self.Nanog],mode='i')*\
+                                 count_func(n3,k2,[self.Oct4,self.Cdx2],mode='i')*b
+
+        self.Gcnf.function_value=a*a10*(count_func(n1,k1,[self.Cdx2])+count_func(n3,k2,[self.Nanog])+count_func(n3,k2,[self.Gcnf]))
+
+        self.Pax6.function_value=a*a10*(count_func(n1,k1,[self.Sox2])+count_func(n1,k1,[self.Gata6]))*\
+                                 count_func(n3,k2,[self.Oct4],mode='i')*count_func(n3,k2,[self.Nanog],mode='i')*b
+
+        self.Sox1.function_value=a*a10*count_func(n1,k1,[self.Sox2])*count_func(n3,k2,[self.Gata6],mode='i')*\
+                                 count_func(n3,k2,[self.Oct4],mode='i')+count_func(n3,k2,[self.Nanog],mode='i')*b
+
+        self.Gata6.function_value=a*a10*count_func(n1,k1,[self.Oct4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+                                  count_func(n3,k2,[self.Sox2],mode='i')+count_func(n3,k3,[self.Nanog])*b
+
+        self.Myc.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+                                count_func(n3,k2,[self.Gata6],mode='i')*count_func(n3,k2,[self.Cdx2],mode='i')+\
+                                count_func(n3,k2,[self.Gcnf],mode='i')*b
+
+        self.Klf4.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+                                 count_func(n3,k2,[self.Cdx2],mode='i')*count_func(n3,k2,[self.Gata6],mode='i')+\
+                                 count_func(n3,k2,[self.Gcnf],mode='i')*b
+
+        self.Prc2.function_value=a1*(count_func(n4,k3,[self.Oct4])+count_func(n4,k3,[self.Sox2])+
+                                     count_func(n4,k4,[self.Myc])+count_func(n4,k4,[self.Klf4]))+\
+                                 a2*(count_func(n4,k4,[self.Mbd3])+count_func(n4,k4,[self.Nurd]))
+
+        self.Mbd3.function_value=a3*count_func(n4,k3,[self.Gata6])+\
+                                 a4*count_func(n4,k4,[self.Prc2],mode='i'+count_func(n4,k4,[self.Mbd3],mode='i'))
+
+        self.Nurd.function_value=a3*count_func(n4,k3,[self.Sox1])+\
+                                 a4*count_func(n4,k4,[self.Prc2],mode='i'+count_func(n4,k4,[self.Nurd],mode='i'))
+
+        self.EA1.function_value=a5*(count_func(n4,k3,[self.Oct4])+count_func(n4,k3,[self.Sox2])+
+                                    count_func(n4,k4,[self.Myc])+count_func(n4,k4,[self.Klf4]))+\
+                                a6*(count_func(n4,k4,[self.EA2],mode='i')+count_func(n4,k4,[self.EA3],mode='i'))
+
+        self.EA2.function_value=a7*(count_func(n4,k3,[self.Gata6])+count_func(n4,k4,[self.EA1],mode='i')+
+                                    count_func(n4,k4,[self.EA3],mode='i'))
+
+        self.EA3.function_value=a7*(count_func(n4,k3,[self.Sox1])+count_func(n4,k4,[self.EA1],mode='i')+
+                                    count_func(n4,k4,[self.EA2],mode='i'))
+
+
+
+
+        self.Oct4_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+                             count_func(n4,k4,[self.EA1])
+
+        self.Sox2_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+                             count_func(n4,k4,[self.EA1])
+
+        self.Nanog_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+                              count_func(n4,k4,[self.EA1],mode='i')
+
+        self.Gata6_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+                              count_func(n4,k4,[self.EA2],mode='i')
+
+        self.Sox1_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Mbd3],mode='i')+\
+                              count_func(n4,k4,[self.EA3],mode='i')
+        #
         for gene in self.gene_list:
-            gene.one_tune_value()
-
-        for gene in self.DNA_gene_list:
-            gene.one_tune_value()
-
-        self.Oct4.function_value=round( self.Oct4.act_value*\
-                                  self.Oct4.or_op([self.OS, self.Klf4, self.OSN, self.Myc]) * \
-                                  self.Oct4.and_op([self.Gata6,self.Sox1]) + \
-                                  self.Oct4.inact_value*self.Oct4.or_op([self.OC,self.Gcnf]),5)
-
-        self.Sox2.function_value=self.Sox2.act_value*\
-                                 (self.Sox2.or_op([self.OS,self.OSN,self.Myc,self.Klf4]))*\
-                                 self.Sox2.and_op([self.Sox1,self.Gata6])+\
-                                 self.Sox2.inact_value*self.Sox2.and_op([self.Oct4])
-
-        self.Nanog.function_value=self.Nanog.act_value*\
-                                  self.Nanog.or_op([self.OS,self.OSN,self.Myc,self.Klf4])*\
-                                  self.Nanog.and_op([self.OG,self.Sox1])+\
-                                  self.Nanog.inact_value*self.Nanog.and_op([self.Oct4])
-
-        self.Cdx2.function_value=self.Cdx2.act_value*\
-                                 self.Cdx2.and_op([self.Cdx2,self.Nanog,self.OC])*self.Cdx2.inact_value
-
-        self.Gcnf.function_value=self.Gcnf.act_value*self.Gcnf.or_op([self.Cdx2,self.Gata6,self.Gcnf])
-
-        self.Pax6.function_value=self.Pax6.act_value*self.Pax6.or_op([self.Sox2,self.Pax6])*\
-                                 self.Pax6.and_op([self.Oct4,self.Nanog])*self.Pax6.inact_value
-
-        self.Sox1.function_value=self.Sox1.act_value*self.Sox1.and_op([self.Sox2,self.Gata6,self.Oct4])+\
-                                 self.Sox1.and_op([self.Nanog])*self.Sox1.inact_value
-
-        self.Gata6.function_value=self.Gata6.act_value*self.Gata6.and_op([self.Oct4,self.Sox1,self.Sox2])+\
-                                  self.Gata6.inact_value*self.Gata6.and_op([self.Nanog])
-
-        self.Myc.function_value=self.Myc.act_value*self.Myc.and_op([self.Klf4,self.Sox1,self.Gata6,self.Cdx2])+\
-                                self.Myc.inact_value*self.Myc.and_op([self.Gcnf])
-
-        self.Klf4.function_value=self.Klf4.act_value*self.Klf4.and_op([self.Klf4,self.Sox1,self.Cdx2,self.Gata6])+\
-                                 self.Klf4.inact_value*self.Klf4.and_op([self.Gcnf])
-
-        self.Prc2.function_value=self.Prc2.act_value*self.Prc2.or_op([self.Oct4,self.Sox2,self.Myc,self.Klf4])+\
-                                 self.Prc2.inact_value*self.Prc2.and_op([self.Mbd3,self.Nurd])
-
-        self.Mbd3.function_value=self.Mbd3.act_value*self.Mbd3.or_op([self.Gata6])+\
-                                 self.Mbd3.inact_value*self.Mbd3.or_op([self.Prc2,self.Nurd])
-
-        self.Nurd.function_value=self.Nurd.act_value*self.Nurd.or_op([self.Sox1])+\
-                                 self.Nurd.inact_value*self.Nurd.or_op([self.Prc2,self.Mbd3])
-
-        self.EA1.function_value=self.EA1.act_value*self.EA1.or_op([self.Oct4,self.Sox2,self.Myc,self.Klf4])+\
-                                self.EA1.inact_value*self.EA1.or_op([self.EA2,self.EA3])
-
-        self.EA2.function_value=self.EA2.act_value*self.EA2.or_op([self.Gata6])+\
-                                self.EA2.inact_value*self.EA2.or_op([self.EA1,self.EA3])
-
-        self.EA3.function_value=self.EA3.act_value*self.EA3.or_op([self.Sox1])+\
-                                self.EA3.inact_value*self.EA3.or_op([self.EA1,self.EA2])
-
-
-
-        self.Oct4_gene.value=self.Oct4_gene.act_value*self.Oct4_gene.or_op([self.EA1])+\
-                             self.Oct4_gene.inact_value*self.Oct4_gene.or_op([self.Mbd3,self.Nurd])
-
-        self.Sox2_gene.value=self.Sox2_gene.act_value*self.Sox2_gene.or_op([self.EA1])+\
-                             self.Sox2_gene.inact_value*self.Sox2_gene.or_op([self.Mbd3,self.Nurd])
-
-        self.Nanog_gene.value=self.Nanog_gene.act_value*self.Nanog_gene.or_op([self.EA1])+\
-                              self.Nanog_gene.inact_value*self.Nanog_gene.or_op([self.Mbd3,self.Nurd])
-
-        self.Gata6_gene.value=self.Gata6_gene.act_value*self.Gata6_gene.or_op([self.EA2])+\
-                              self.Gata6_gene.inact_value*self.Gata6_gene.or_op([self.Prc2,self.Nurd])
-
-        self.Sox1_gene.value=self.Sox1_gene.act_value*self.Sox1_gene.or_op([self.EA3])+\
-                             self.Sox1_gene.inact_value*self.Sox1_gene.or_op([self.Prc2,self.Mbd3])
-
+            gene.function_value = round(gene.function_value, gene.max_acc)
+            gene.ODE_result()
         for gene in self.DNA_gene_list:
             gene.value=round(gene.value,gene.max_acc)
-        for gene in self.gene_list:
-            gene.function_value=round(gene.function_value,gene.max_acc)
-            gene.ODE_result()
+
+
 
 
     def reinit_gene_value(self):
