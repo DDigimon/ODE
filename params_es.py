@@ -1,6 +1,6 @@
 from data import GeneData,DataSaver
-from tqdm import tqdm
 import numpy as np
+np.seterr()
 import pickle
 import math
 max_iterations=100
@@ -16,7 +16,7 @@ class ES():
 
 
 
-    def attractor_count(self):
+    def attractor_count(self,id,save_dir):
         # init
         iter_count=0
         gene_data=GeneData()
@@ -29,7 +29,14 @@ class ES():
 
         while iter_count<self.max_trajectories:
             break_counter+=1
+            self.data_saver.save_data(save_dir+'init'+str(id)+'+'+str(iter_count)+'.pkl')
             data=gene_data.trajectories_op(100,128)
+            print(data)
+            if gene_data.end_step!=gene_data.steps:
+                del gene_data
+                gene_data = GeneData()
+                gene_data = self.data_saver.release_data(gene_data)
+                continue
             gap=gene_data._sum_value_for_data(data,gene_data.steps)-\
                 gene_data._sum_value_for_data(data,gene_data.steps-2)
             # for a stable state
@@ -66,7 +73,7 @@ class ES():
         # init
         current_cost=self.max_trajectories
         for i in range(1,iterations):
-            self.attractor_count()
+            self.attractor_count(i,save_dir)
             self.cost_count()
             new_cost=self.cost
             save_path=save_dir
@@ -89,4 +96,4 @@ class ES():
 
 
 es=ES(50,temperature_rate=max_temperature,save_path='./data/result/')
-es.SA(max_iterations,max_temperature,save_dir='./data/result4/')
+es.SA(max_iterations,max_temperature,save_dir='./data/result6/')

@@ -83,8 +83,14 @@ class EnergyLandscape():
 
 
     def _quasi_potential(self,x,mean,var):
+        if var==0:
+            var=0.001
         p=math.exp(-(x-mean)**2/(2*var))/math.sqrt(2*math.pi*var)
+        if p==0:
+            p=0.001
         u=-math.log(p)
+        if u >=500:
+            u=500
         return u
 
     def quasi_landscape(self):
@@ -100,7 +106,9 @@ class EnergyLandscape():
                                                        self.gene_statistic_value[id]['var']))
 
                     for u_value in u:
-                        self.landscape[i][j]*=u_value*100000
+                        self.landscape[i][j]*=u_value
+                        if self.landscape[i][j] >= 1000:
+                            self.landscape[i][j] = 1000
 
 
         else:
@@ -114,6 +122,8 @@ class EnergyLandscape():
             for i in range(len(self.landscape)):
                 for j in range(len(self.landscape[i])):
                     self.landscape[i][j]=self.ux[i]*self.uy[j]
+                    if self.landscape[i][j]>=1000:
+                        self.landscape[i][j]=1000
 
 
         self.X,self.Y=np.meshgrid(self.x_sample,self.y_sample)
@@ -128,6 +138,7 @@ class EnergyLandscape():
 
     def GPDM_solver(self):
         train_data=[]
+        print(self.gene_data)
         for key_gene in self.select_gene:
             train_data.append(self.gene_data[key_gene])
         self.train_data=np.array(train_data).T
@@ -136,12 +147,12 @@ class EnergyLandscape():
         return output
 
 
-# gene_data_path='./data/result.pkl'
-# generator_path='./data/generator_result.pkl'
+# gene_data_path='./data/result16.pkl'
+# generator_path='./data/generator_result16.pkl'
 #
 # energy_land=EnergyLandscape(select_gene=['Oct4','Sox2','Nanog','Cdx2','Pax6','Sox1','Gata6','Myc','Klf4'],
 #                             gene_data_path=gene_data_path,generator_path=generator_path,
-#                             mode='GPDM',generator_final_data=True)
+#                             mode='GPDM',generator_final_data=False)
 # # energy_land=EnergyLandscape(select_gene=['Sox1','Gata6'],
 # #                             gene_data_path=gene_data_path,generator_path=generator_path,
 # #                             generator_final_data=False)
@@ -151,19 +162,33 @@ class EnergyLandscape():
 
 
 import os
-dir_path='./data/result/'
+dir_path='./data/result6/'
 file_lens=len(os.listdir(dir_path))
 for file in os.listdir(dir_path):
-    print(file)
-    gene_data_path = dir_path+file
-    generator_path = './data/generator_result.pkl'
+    if 'init' not in file:
+        print(file)
+        gene_data_path = dir_path+file
+        generator_path = './data/generator_result.pkl'
 
-    # energy_land = EnergyLandscape(select_gene=['Oct4', 'Sox2', 'Nanog', 'Cdx2', 'Pax6', 'Sox1', 'Gata6', 'Myc', 'Klf4'],
-    #                               gene_data_path=gene_data_path, generator_path=generator_path,
-    #                               mode='GPDM', generator_final_data=True)
-    energy_land=EnergyLandscape(select_gene=['Sox1','Gata6'],
-                                gene_data_path=gene_data_path,generator_path=generator_path,
-                                generator_final_data=True)
-    energy_land.init_landscape((30, 30), (-0.5, 1.5), (-0.5, 1.5))
-    energy_land.quasi_landscape()
-    energy_land.draw_landscape()
+        # energy_land = EnergyLandscape(select_gene=['Oct4', 'Sox2', 'Nanog', 'Cdx2', 'Pax6', 'Sox1', 'Gata6', 'Myc', 'Klf4'],
+        #                               gene_data_path=gene_data_path, generator_path=generator_path,
+        #                               mode='GPDM', generator_final_data=True)
+        energy_land=EnergyLandscape(select_gene=['Sox1','Gata6'],
+                                    gene_data_path=gene_data_path,generator_path=generator_path,
+                                    generator_final_data=True)
+        energy_land.init_landscape((30, 30), (-0.5, 1.5), (-0.5, 1.5))
+        energy_land.quasi_landscape()
+        energy_land.draw_landscape()
+        # energy_land=EnergyLandscape(select_gene=['Sox1','Oct4'],
+        #                             gene_data_path=gene_data_path,generator_path=generator_path,
+        #                             generator_final_data=False)
+        # energy_land.init_landscape((30, 30), (-0.5, 1.5), (-0.5, 1.5))
+        # energy_land.quasi_landscape()
+        # energy_land.draw_landscape()
+        #
+        # energy_land = EnergyLandscape(select_gene=['Oct4', 'Sox2', 'Nanog', 'Cdx2', 'Pax6', 'Sox1', 'Gata6', 'Myc', 'Klf4'],
+        #                               gene_data_path=gene_data_path, generator_path=generator_path,
+        #                               mode='GPDM', generator_final_data=False)
+        # energy_land.init_landscape((30, 30), (-0.5, 1.5), (-0.5, 1.5))
+        # energy_land.quasi_landscape()
+        # energy_land.draw_landscape()

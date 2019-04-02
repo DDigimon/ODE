@@ -190,50 +190,63 @@ class GeneData():
             value = 1
             for gene in gene_list:
                 value *= gene.value
+            if (k ** n + value ** n)==0:
+                return 0.001
             if mode == 'a':
                 return round(value ** n / (k ** n + value ** n), 3)
             if mode == 'i':
                 return round(k ** n / (k ** n + value ** n), 3)
-        a1,a2,a3,a4,a5,a6,a7,a8,a9,a10=0.4802,0.7065,0.6033,0.2405,0.8269,0.0386,0.7158,0.3503,0.6858,0.7
-        n1,n2 ,n3,n4=1,5,7,2
-        k1,k2,k3,k4=0.1,0.4,0.0252,0.4086
-        a=0.1
-        b=0.01
-        self.Oct4.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+count_func(n1,k1,[self.Klf4])+
-                                    count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc]))*\
-                                 count_func(n2,k2,[self.Gata6],mode='i')*count_func(n2,k2,[self.Sox1],mode='i')+\
-                                 (count_func(n2,k2,[self.Oct4,self.Cdx2],mode='i')+count_func(n2,k2,[self.Gcnf])*b)
 
-        self.Sox2.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
-                                    count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+
-                                    count_func(n1,k1,[self.Myc])+count_func(n1,k1,[self.Klf4]))*\
-                                 count_func(n2,k2,[self.Sox1],mode='i')*count_func(n2,k2,[self.Gata6],mode='i')+\
+        # a1,a2,a3,a4,a5,a6,a7,a8,a9,a10=0.4802,0.7065,0.6033,0.2405,0.8269,0.0386,0.7158,0.3503,0.6858,0.7
+        # n1,n2 ,n3,n4=1,5,7,2
+        # k1,k2,k3,k4=0.1,0.4,0.0252,0.4086
+        # a=0.1
+        # b=0.01
+        a=0.1
+        a1,a2,a3,a4,a5,a6,a7,a8,a9,a10=0.4802,0.7065,0.6033,0.2405,0.8269,0.0386,0.7158,0.3503,0.6858,0.7
+        # n1,n2 ,n3,n4=1,5,7,2
+        # k1,k2,k3,k4=0.1,0.4,0.0252,0.4086
+        ka,ki=0.1,0.4
+        na,ni=1,5
+        a=0.1
+        aa=0.7
+        b=0.01
+        kb=0.11
+        self.Oct4.function_value=a*(count_func(na,ka,[self.Oct4,self.Sox2])+count_func(na,k1,[self.Klf4])+
+                                    count_func(na,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(na,k1,[self.Myc]))*\
+                                 count_func(ni,k2,[self.Gata6],mode='i')*count_func(n2,k2,[self.Sox1],mode='i')+\
+                                 (count_func(n2,k2,[self.Oct4,self.Cdx2],mode='i')+count_func(n2,k2,[self.Gcnf],mode='i')*b)
+
+        self.Sox2.function_value=a*(count_func(na,k1,[self.Oct4,self.Sox2])+
+                                    count_func(na,k1,[self.Oct4,self.Sox2,self.Nanog])+
+                                    count_func(na,k1,[self.Myc])+count_func(na,k1,[self.Klf4]))*\
+                                 count_func(n2,k2,[self.Sox1],mode='i')*count_func(ni,k2,[self.Gata6],mode='i')+\
                                  count_func(n3,k2,[self.Oct4],mode='i')*b
 
-        self.Nanog.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
-                                     count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc])+
-                                     count_func(n1,k1,[self.Klf4]))*count_func(n2,k2,[self.Oct4,self.Gata6],mode='i')*\
+        self.Nanog.function_value=a*(count_func(na,k1,[self.Oct4,self.Sox2])+
+                                     count_func(na,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(na,k1,[self.Myc])+
+                                     count_func(na,k1,[self.Klf4]))*count_func(n2,k2,[self.Oct4,self.Gata6],mode='i')*\
                                   count_func(n2,k2,[self.Sox1],mode='i')+count_func(n2,k2,[self.Oct4],mode='i')*b
 
-        self.Cdx2.function_value=a10*count_func(n1,k1,[self.Cdx2])*count_func(n3,k2,[self.Nanog],mode='i')*\
+        self.Cdx2.function_value=a10*count_func(na,k1,[self.Cdx2])*count_func(n3,k2,[self.Nanog],mode='i')*\
                                  count_func(n3,k2,[self.Oct4,self.Cdx2],mode='i')*b
 
-        self.Gcnf.function_value=a*a10*(count_func(n1,k1,[self.Cdx2])+count_func(n3,k2,[self.Nanog])+count_func(n3,k2,[self.Gcnf]))
+        self.Gcnf.function_value=a*a10*(count_func(na,k1,[self.Cdx2])+count_func(na,k2,[self.Nanog])+count_func(na,k2,[self.Gcnf]))
 
-        self.Pax6.function_value=a*a10*(count_func(n1,k1,[self.Sox2])+count_func(n1,k1,[self.Gata6]))*\
+        self.Pax6.function_value=a*a10*(count_func(na,k1,[self.Sox2])+count_func(na,k1,[self.Gata6]))*\
                                  count_func(n3,k2,[self.Oct4],mode='i')*count_func(n3,k2,[self.Nanog],mode='i')*b
 
-        self.Sox1.function_value=a*a10*count_func(n1,k1,[self.Sox2])*count_func(n3,k2,[self.Gata6],mode='i')*\
+        self.Sox1.function_value=a*a10*count_func(na,k1,[self.Sox2])*count_func(ni,k2,[self.Gata6],mode='i')*\
                                  count_func(n3,k2,[self.Oct4],mode='i')+count_func(n3,k2,[self.Nanog],mode='i')*b
 
-        self.Gata6.function_value=a*a10*count_func(n1,k1,[self.Oct4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        self.Gata6.function_value=a*a10*count_func(na,k1,[self.Oct4])*count_func(n3,k2,[self.Sox1],mode='i')*\
                                   count_func(n3,k2,[self.Sox2],mode='i')+count_func(n3,k3,[self.Nanog])*b
 
-        self.Myc.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        self.Myc.function_value=a*count_func(na,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
                                 count_func(n3,k2,[self.Gata6],mode='i')*count_func(n3,k2,[self.Cdx2],mode='i')+\
                                 count_func(n3,k2,[self.Gcnf],mode='i')*b
 
-        self.Klf4.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        self.Klf4.function_value=a*count_func(na,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
                                  count_func(n3,k2,[self.Cdx2],mode='i')*count_func(n3,k2,[self.Gata6],mode='i')+\
                                  count_func(n3,k2,[self.Gcnf],mode='i')*b
 
@@ -242,10 +255,10 @@ class GeneData():
                                  a2*(count_func(n4,k4,[self.Mbd3])+count_func(n4,k4,[self.Nurd]))
 
         self.Mbd3.function_value=a3*count_func(n4,k3,[self.Gata6])+\
-                                 a4*count_func(n4,k4,[self.Prc2],mode='i'+count_func(n4,k4,[self.Mbd3],mode='i'))
+                                 a4*count_func(n4,k4,[self.Prc2],mode='i')+count_func(n4,k4,[self.Mbd3],mode='i')
 
         self.Nurd.function_value=a3*count_func(n4,k3,[self.Sox1])+\
-                                 a4*count_func(n4,k4,[self.Prc2],mode='i'+count_func(n4,k4,[self.Nurd],mode='i'))
+                                 a4*count_func(n4,k4,[self.Prc2],mode='i')+count_func(n4,k4,[self.Nurd],mode='i')
 
         self.EA1.function_value=a5*(count_func(n4,k3,[self.Oct4])+count_func(n4,k3,[self.Sox2])+
                                     count_func(n4,k4,[self.Myc])+count_func(n4,k4,[self.Klf4]))+\
@@ -260,20 +273,90 @@ class GeneData():
 
 
 
-        self.Oct4_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
-                             count_func(n4,k4,[self.EA1])
+        self.Oct4_gene.value=0
 
-        self.Sox2_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
-                             count_func(n4,k4,[self.EA1])
+        self.Sox2_gene.value=0
 
-        self.Nanog_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
-                              count_func(n4,k4,[self.EA1],mode='i')
+        self.Nanog_gene.value=0
 
-        self.Gata6_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
-                              count_func(n4,k4,[self.EA2],mode='i')
+        self.Gata6_gene.value=0
 
-        self.Sox1_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Mbd3],mode='i')+\
-                              count_func(n4,k4,[self.EA3],mode='i')
+        self.Sox1_gene.value=0
+        # self.Oct4.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+count_func(n1,k1,[self.Klf4])+
+        #                             count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc]))*\
+        #                          count_func(n2,k2,[self.Gata6],mode='i')*count_func(n2,k2,[self.Sox1],mode='i')+\
+        #                          (count_func(n2,k2,[self.Oct4,self.Cdx2],mode='i')+count_func(n2,k2,[self.Gcnf])*b)
+        #
+        # self.Sox2.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
+        #                             count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+
+        #                             count_func(n1,k1,[self.Myc])+count_func(n1,k1,[self.Klf4]))*\
+        #                          count_func(n2,k2,[self.Sox1],mode='i')*count_func(n2,k2,[self.Gata6],mode='i')+\
+        #                          count_func(n3,k2,[self.Oct4],mode='i')*b
+        #
+        # self.Nanog.function_value=a*(count_func(n1,k1,[self.Oct4,self.Sox2])+
+        #                              count_func(n1,k1,[self.Oct4,self.Sox2,self.Nanog])+count_func(n1,k1,[self.Myc])+
+        #                              count_func(n1,k1,[self.Klf4]))*count_func(n2,k2,[self.Oct4,self.Gata6],mode='i')*\
+        #                           count_func(n2,k2,[self.Sox1],mode='i')+count_func(n2,k2,[self.Oct4],mode='i')*b
+        #
+        # self.Cdx2.function_value=a10*count_func(n1,k1,[self.Cdx2])*count_func(n3,k2,[self.Nanog],mode='i')*\
+        #                          count_func(n3,k2,[self.Oct4,self.Cdx2],mode='i')*b
+        #
+        # self.Gcnf.function_value=a*a10*(count_func(n1,k1,[self.Cdx2])+count_func(n3,k2,[self.Nanog])+count_func(n3,k2,[self.Gcnf]))
+        #
+        # self.Pax6.function_value=a*a10*(count_func(n1,k1,[self.Sox2])+count_func(n1,k1,[self.Gata6]))*\
+        #                          count_func(n3,k2,[self.Oct4],mode='i')*count_func(n3,k2,[self.Nanog],mode='i')*b
+        #
+        # self.Sox1.function_value=a*a10*count_func(n1,k1,[self.Sox2])*count_func(n3,k2,[self.Gata6],mode='i')*\
+        #                          count_func(n3,k2,[self.Oct4],mode='i')+count_func(n3,k2,[self.Nanog],mode='i')*b
+        #
+        # self.Gata6.function_value=a*a10*count_func(n1,k1,[self.Oct4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        #                           count_func(n3,k2,[self.Sox2],mode='i')+count_func(n3,k3,[self.Nanog])*b
+        #
+        # self.Myc.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        #                         count_func(n3,k2,[self.Gata6],mode='i')*count_func(n3,k2,[self.Cdx2],mode='i')+\
+        #                         count_func(n3,k2,[self.Gcnf],mode='i')*b
+        #
+        # self.Klf4.function_value=a*count_func(n1,k1,[self.Klf4])*count_func(n3,k2,[self.Sox1],mode='i')*\
+        #                          count_func(n3,k2,[self.Cdx2],mode='i')*count_func(n3,k2,[self.Gata6],mode='i')+\
+        #                          count_func(n3,k2,[self.Gcnf],mode='i')*b
+        #
+        # self.Prc2.function_value=a1*(count_func(n4,k3,[self.Oct4])+count_func(n4,k3,[self.Sox2])+
+        #                              count_func(n4,k4,[self.Myc])+count_func(n4,k4,[self.Klf4]))+\
+        #                          a2*(count_func(n4,k4,[self.Mbd3])+count_func(n4,k4,[self.Nurd]))
+        #
+        # self.Mbd3.function_value=a3*count_func(n4,k3,[self.Gata6])+\
+        #                          a4*count_func(n4,k4,[self.Prc2],mode='i')+count_func(n4,k4,[self.Mbd3],mode='i')
+        #
+        # self.Nurd.function_value=a3*count_func(n4,k3,[self.Sox1])+\
+        #                          a4*count_func(n4,k4,[self.Prc2],mode='i')+count_func(n4,k4,[self.Nurd],mode='i')
+        #
+        # self.EA1.function_value=a5*(count_func(n4,k3,[self.Oct4])+count_func(n4,k3,[self.Sox2])+
+        #                             count_func(n4,k4,[self.Myc])+count_func(n4,k4,[self.Klf4]))+\
+        #                         a6*(count_func(n4,k4,[self.EA2],mode='i')+count_func(n4,k4,[self.EA3],mode='i'))
+        #
+        # self.EA2.function_value=a7*(count_func(n4,k3,[self.Gata6])+count_func(n4,k4,[self.EA1],mode='i')+
+        #                             count_func(n4,k4,[self.EA3],mode='i'))
+        #
+        # self.EA3.function_value=a7*(count_func(n4,k3,[self.Sox1])+count_func(n4,k4,[self.EA1],mode='i')+
+        #                             count_func(n4,k4,[self.EA2],mode='i'))
+        #
+        #
+        #
+        #
+        # self.Oct4_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+        #                      count_func(n4,k4,[self.EA1])
+        #
+        # self.Sox2_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+        #                      count_func(n4,k4,[self.EA1])
+        #
+        # self.Nanog_gene.value=a8*count_func(n4,k3,[self.Mbd3],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+        #                       count_func(n4,k4,[self.EA1],mode='i')
+        #
+        # self.Gata6_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Nurd],mode='i')+\
+        #                       count_func(n4,k4,[self.EA2],mode='i')
+        #
+        # self.Sox1_gene.value=a9*count_func(n4,k3,[self.Prc2],mode='i')+count_func(n4,k3,[self.Mbd3],mode='i')+\
+        #                       count_func(n4,k4,[self.EA3],mode='i')
         #
         for gene in self.gene_list:
             gene.function_value = round(gene.function_value, gene.max_acc)

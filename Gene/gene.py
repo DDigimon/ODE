@@ -10,10 +10,10 @@ class gene():
         self.nor_mu=0
         self.nor_sigm=0.5
         self.name=name
-        self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
-        self.kbase=0
-        self.act_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
-        self.inact_value = round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
+        self.value=np.random.uniform(0,2)
+        self.kbase=np.random.uniform(0,0.5)
+        self.act_value = np.random.uniform(0.1)
+        self.inact_value = np.random.uniform(0,1)
         self.gama=0.1
 
         self.activate_link=[]
@@ -39,8 +39,8 @@ class gene():
     def init_gene_value(self):
         self.value=round(np.random.normal(self.nor_mu,self.nor_sigm),self.max_acc)
 
-    def init_param(self,act_n=random.randint(1,4),inact_n=random.randint(1,4),
-                   act_k=round(np.random.normal(0,0.5),3),inact_k=round(np.random.normal(0,0.5),3)):
+    def init_param(self,act_n=random.randint(1,2),inact_n=random.randint(1,2),
+                   act_k=np.random.uniform(0,0.5),inact_k=np.random.uniform(0,0.5)):
         for i in self.activate_link:
             self.link_value[i.name]={}
             # TODO init method

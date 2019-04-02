@@ -59,6 +59,12 @@ class GeneData():
             self.gene_name_dic[each_gene.name] = each_gene
 
         self.params=ParamManager()
+        self.params.gene_normal_init(len(self.gene_list),len(self.DNA_gene_list))
+        for id,genes in enumerate(self.gene_list):
+            genes.value=self.params.gene_value[id]
+        # for id,genes in enumerate(self.DNA_gene_list):
+        #     genes.value=self.params.DNA_gene_value[id]
+
         self._add_link()
 
     def _add_link(self):
@@ -296,11 +302,18 @@ class GeneData():
             gene_dic[each_gene.name] = []
             gene_name_dic[each_gene.name] = each_gene
 
-
+        is_continue=True
+        self.end_step=self.steps
         for times in range(self.steps):
             for key in gene_dic:
                 # dataset save
                 gene_dic[key].append(gene_name_dic[key].value)
+                if gene_name_dic[key].value==float('nan') or gene_name_dic[key].value==float('inf'):
+                    is_continue=False
+            if is_continue==False:
+                self.end_step = times
+                break
+
             self.one_tune()
 
         data.append(gene_dic)
